@@ -1,0 +1,15 @@
+/* CSS Document */
+
+@font-face {
+	font-family: 'MuseoSans';
+	src: url('fonts/MuseoSans_100.otf'); 
+	src: 
+		local('MuseoSans'),
+		url('fonts/MuseoSans_100.otf') 
+		format('opentype');	
+}
+
+body{
+	font-family:'MuseoSans';
+}
+
