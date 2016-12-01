@@ -1,0 +1,848 @@
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="">
+
+    <title>
+      
+        Overview &middot; 
+      
+    </title>
+
+    <link href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic" rel="stylesheet">
+    <link href="assets/css/toolkit-inverse.css" rel="stylesheet">
+    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">    
+    <link rel="stylesheet" type="text/css" href="css/ce.css">
+    <style>
+      /* note: this is a hack for ios iframe for bootstrap themes shopify page */
+      /* this chunk of css is not part of the toolkit :) */
+      body {
+        width: 1px;
+        min-width: 100%;
+        *width: 100%;
+      }
+    </style>
+  </head>
+
+
+<body style="padding-top:30px;">
+  <div class="container">
+  <div id="mapa" style="position: absolute; float: right; left: 330px; top: 110px;"></div>
+    <div class="row">
+      <div class="col-sm-3 sidebar">
+        <nav class="sidebar-nav">
+          <div class="sidebar-header" style="position:relative; height:100px;">
+            <button class="nav-toggler nav-toggler-sm sidebar-toggler" type="button" data-toggle="collapse" data-target="#nav-toggleable-sm">
+              <span class="sr-only">Toggle nav</span>
+            </button>
+            <img src="img/logo.jpg" width="223" height="75">
+          </div>
+          <div class="collapse nav-toggleable-sm" id="nav-toggleable-sm">
+            <div class="sidebar-form" style="background-color:#069; padding:10px;font-size:15px;">
+              <i class='icon-home' style="font-size:20px;"></i>&nbsp;&nbsp;COMPARADOR GLOBAL
+            </div>
+			<ul class="nav nav-pills nav-stacked" style="clear:both;">
+			<li class="nav-header">Panel de control</li>
+			<li id="ubicacion" onClick="sel(this)">
+				<a href="javascript:;" data-toggle="collapse" data-target="#sub_ubi"><span style="position:relative; float:right;z-index:10;"><img id="img_ubi" src="img/off.png" width="30" height="17" alt="on"></span><i class="icon-map-marker" style="font-size:20px;"></i>&nbsp;&nbsp;Ubicación</a>
+			</li>
+					<ul id="sub_ubi" class="collapse" style="background-color:#3c414f; color:#CCC; list-style:none; padding:5px;">
+					</ul>
+			<li id="entidades" onClick="sel(this)">
+			  <a href="javascript:;" data-toggle="collapse" data-target="#sub_enti"><div style="position:relative; float:right;z-index:10;"><img id="img_enti" src="img/off.png" width="30" height="17" alt="off"></div><i class="icon-building"></i>&nbsp;&nbsp;Entidades</a></li>
+					<ul id="sub_enti" class="collapse" style="background-color:#3c414f; color:#CCC; list-style:none; padding:5px;">
+					</ul>
+			<li id="metros" onClick="sel(this)">
+				<a href="javascript:;" data-toggle="collapse" data-target="#sub_metr"><div style="position:relative; float:right;z-index:10;"><img id="img_metr" src="img/off.png" width="30" height="17" alt="on"></div><i class="icon-th"></i>&nbsp;&nbsp;Metros 2</a>
+			</li>
+					<ul id="sub_metr" class="collapse" style="background-color:#3c414f; color:#CCC; list-style:none; padding:5px;">
+					</ul>
+			<li id="agno" onClick="sel(this)">
+			  <a href="javascript:;" data-toggle="collapse" data-target="#sub_agno"><div style="position:relative; float:right;z-index:10;"><img id="img_agno" src="img/off.png" width="30" height="17" alt="on"></div><i class="icon-calendar"></i>&nbsp;&nbsp;Año Construcción</a>
+			</li>
+					<ul id="sub_agno" class="collapse" style="background-color:#3c414f; color:#CCC; list-style:none; padding:5px;">
+					</ul>
+              <li class="nav-header">More</li>
+              <li >
+                <a href="javascript:;">
+                  <i class="icon-user" style="font-size:20px;"></i>&nbsp;&nbsp;Mi Cuenta
+                </a>
+              </li>
+              <li>
+                <a href="javascript:;">
+                 <i class="icon-cog" style="font-size:15px;"></i>&nbsp; Configuración</a>
+              </li>
+              <li ></li>
+              <li></li>
+            </ul>
+            <hr class="visible-xs m-t">
+    </div>
+        </nav>
+</div>
+      <div class="col-sm-9 content">
+        <div class="dashhead">
+  <div class="dashhead-titles">
+    <h6 class="dashhead-subtitle">Panel de Control</h6>
+    <h2 class="dashhead-title">Indicadores Globales</h2>
+  </div>
+
+  <div class="btn-toolbar dashhead-toolbar"></div>
+</div>
+
+<div id="mensajes" style="position:relative; padding-top:0px; margin-bottom:20px;">
+        <div id="leyenda" style="float: left; width:50%;; opacity: 0.9; z-index: 1000; color: #FFF; font-size: 14px;">
+          <div style="line-height: 150%;">
+          	<span style="font-size:16px;">
+          	  Al 21 de Noveimbre del 2016</span>
+          	  <br>
+             <div style="position:relative;">
+                <div style="color:#999;">Haz consumido:</div>
+                <div id="KWH" style="color:#F90; font-size:22px;"></div>
+             </div>
+             <div style="position:relative;">
+                <div style="color:#999;">Haz gastado:</div>
+                <div id="MM$" style="color:#F90; font-size:22px;"></div>
+              </div>
+            </div>
+        </div>
+        <div id="leyenda1" style="float:left; width:50%; background-color:#FFF09D; opacity:0.8; z-index:1000; padding:15px; color:#000; font-size:14px;">
+        <div onClick="cerrar('leyenda1')" style="position:relative; float:right; width:20px; height:20px; top:-10px; left:+10px; cursor:pointer; text-align:center;"><strong>X</strong></div>
+            <div>
+            <strong>HACE UN AÑO</strong>
+              <br>
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. </div>
+        </div>    
+</div>
+<div style=" position:relative; float:left; width:100%; height:10px; margin-bottom:40px;"><hr class="m-t"></div>
+
+
+<div class="row text-center m-t-lg">
+  <div class="col-sm-4 m-b-md">
+    <div class="w-lg m-x-auto">
+      <canvas id="pie1" width="200" height="200"></canvas>
+    </div>
+    <strong class="text-muted" style="line-height:100%;">Consumo kWh</strong>
+    <h3>Por Entidades</h3>
+  </div>
+  <div class="col-sm-4 m-b-md">
+    <div class="w-lg m-x-auto">
+      <canvas id="pie2" width="200" height="200"></canvas>
+    </div>
+    <strong class="text-muted">Consumo $</strong>
+    <h3>Por Entidades</h3>
+  </div>
+  <div class="col-sm-4 m-b-md">
+    <div class="w-lg m-x-auto">
+      <canvas id="pie3" width="200" height="200"></canvas>
+    </div>
+    <strong class="text-muted">Porcentaje</strong>
+    <h3>Año Construcción</h3>
+  </div>
+</div>
+<div class="hr-divider m-t-md m-b">
+  <h3 class="hr-divider-content hr-divider-heading">CONSUMO ANUAL</h3>
+</div>
+<div style="width:100%; min-height:300px;">
+  <canvas
+    class="ex-line-graph"
+    width="600" height="400"
+    data-chart="bar"
+    data-scale-line-color="transparent"
+    data-scale-grid-line-color="rgba(255,255,255,.05)"
+    data-scale-font-color="#a2a2a2"
+    data-labels="['NOV','DIC','ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV']"
+    data-value="[{ label: 'KWH',fillColor:'#dbe10b', data: [65, 59, 80, 81, 56, 55, 40, 22, 10, 98, 70, 24,34] },{ label: 'MM$',fillColor:'#de242b',data: [28, 48, 40, 19, 86, 27, 90, 22, 35, 90, 34, 33, 20] }]">
+  </canvas>
+</div>
+<div class="hr-divider m-t-md m-b">
+  <h3 class="hr-divider-content hr-divider-heading">COMPORTAMIENTO DE CONSUMO</h3>
+</div>
+
+<div class="row statcards">
+  <div class="col-sm-6 col-lg-3 m-b">
+    <div class="statcard statcard-success">
+      <div class="p-a">
+        <span class="statcard-desc">OPTIMIZARON</span>
+        <h2 class="statcard-number">
+          12,938
+          <small class="delta-indicator delta-positive">5%</small>
+        </h2>
+        <hr class="statcard-hr m-b-0">
+      </div>
+      <canvas id="sparkline1" width="378" height="94" class="sparkline" data-chart="spark-line" data-value="[{data:[28,68,41,43,96,45,100]}]" data-labels="['a','b','c','d','e','f','g']" style="width: 189px; height: 47px;"></canvas>
+    </div>
+  </div>
+  <div class="col-sm-6 col-lg-3 m-b">
+    <div class="statcard statcard-danger">
+      <div class="p-a">
+        <span class="statcard-desc">AUMENTARON</span>
+        <h2 class="statcard-number">
+          758
+          <small class="delta-indicator delta-negative">1.3%</small>
+        </h2>
+        <hr class="statcard-hr m-b-0">
+      </div>
+      <canvas id="sparkline1" width="378" height="94" class="sparkline" data-chart="spark-line" data-value="[{data:[4,34,64,27,96,50,80]}]" data-labels="['a', 'b','c','d','e','f','g']" style="width: 189px; height: 47px;"></canvas>
+    </div>
+  </div>
+  <div class="col-sm-6 col-lg-3 m-b">
+    <div class="statcard statcard-info">
+      <div class="p-a">
+        <span class="statcard-desc">MANTUVIERON</span>
+        <h2 class="statcard-number">
+          1,293
+          <small class="delta-indicator delta-positive">6.75%</small>
+        </h2>
+        <hr class="statcard-hr m-b-0">
+      </div>
+      <canvas id="sparkline1" width="378" height="94" class="sparkline" data-chart="spark-line" data-value="[{data:[12,38,32,60,36,54,68]}]" data-labels="['a', 'b','c','d','e','f','g']" style="width: 189px; height: 47px;"></canvas>
+    </div>
+  </div>
+  <div class="col-sm-6 col-lg-3 m-b">
+    <div class="statcard statcard-warning">
+      <div class="p-a">
+        <span class="statcard-desc">RIESGO DE AUMENTO</span>
+        <h2 class="statcard-number">
+          758
+          <small class="delta-indicator delta-negative">1.3%</small>
+        </h2>
+        <hr class="statcard-hr m-b-0">
+      </div>
+      <canvas id="sparkline1" width="378" height="94" class="sparkline" data-chart="spark-line" data-value="[{data:[43,48,52,58,50,95,100]}]" data-labels="['a', 'b','c','d','e','f','g']" style="width: 189px; height: 47px;"></canvas>
+    </div>
+  </div>
+</div>
+
+<hr class="m-t">
+
+<div class="row">
+  <div class="col-md-6 m-b-md">
+    <div class="list-group">
+      <h4 class="list-group-header">
+        ENTIDADES DE MAYOR CONSUMO
+      </h4>
+      
+        <a class="list-group-item" href="#">
+          <span class="list-group-progress" style="width: 62.4%;"></span>
+          <span class="pull-right text-muted">62.4%</span>
+          United States
+        </a>
+      
+        <a class="list-group-item" href="#">
+          <span class="list-group-progress" style="width: 15.0%;"></span>
+          <span class="pull-right text-muted">15.0%</span>
+          India
+        </a>
+      
+        <a class="list-group-item" href="#">
+          <span class="list-group-progress" style="width: 5.0%;"></span>
+          <span class="pull-right text-muted">5.0%</span>
+          United Kingdom
+        </a>
+      
+        <a class="list-group-item" href="#">
+          <span class="list-group-progress" style="width: 5.0%;"></span>
+          <span class="pull-right text-muted">5.0%</span>
+          Canada
+        </a>
+      
+        <a class="list-group-item" href="#">
+          <span class="list-group-progress" style="width: 4.5%;"></span>
+          <span class="pull-right text-muted">4.5%</span>
+          Russia
+        </a>
+      
+        <a class="list-group-item" href="#">
+          <span class="list-group-progress" style="width: 2.3%;"></span>
+          <span class="pull-right text-muted">2.3%</span>
+          Mexico
+        </a>
+      
+        <a class="list-group-item" href="#">
+          <span class="list-group-progress" style="width: 1.7%;"></span>
+          <span class="pull-right text-muted">1.7%</span>
+          Spain
+        </a>
+      
+        <a class="list-group-item" href="#">
+          <span class="list-group-progress" style="width: 1.5%;"></span>
+          <span class="pull-right text-muted">1.5%</span>
+          France
+        </a>
+      
+        <a class="list-group-item" href="#">
+          <span class="list-group-progress" style="width: 1.4%;"></span>
+          <span class="pull-right text-muted">1.4%</span>
+          South Africa
+        </a>
+      
+        <a class="list-group-item" href="#">
+          <span class="list-group-progress" style="width: 1.2%;"></span>
+          <span class="pull-right text-muted">1.2%</span>
+          Japan
+        </a>
+      
+    </div>
+    <a href="#" class="btn btn-primary-outline p-x">VER TODO</a>
+  </div>
+  <div class="col-md-6 m-b-md">
+    <div class="list-group">
+      <h4 class="list-group-header">
+        ENTIDADES DE MENOR CONSUMO</h4>
+      
+        <a class="list-group-item" href="#">
+          <span class="pull-right text-muted">3,929,481</span>
+          / (Logged out)
+        </a>
+      
+        <a class="list-group-item" href="#">
+          <span class="pull-right text-muted">1,143,393</span>
+          / (Logged in)
+        </a>
+      
+        <a class="list-group-item" href="#">
+          <span class="pull-right text-muted">938,287</span>
+          /tour
+        </a>
+      
+        <a class="list-group-item" href="#">
+          <span class="pull-right text-muted">749,393</span>
+          /features/something
+        </a>
+      
+        <a class="list-group-item" href="#">
+          <span class="pull-right text-muted">695,912</span>
+          /features/another-thing
+        </a>
+      
+        <a class="list-group-item" href="#">
+          <span class="pull-right text-muted">501,938</span>
+          /users/username
+        </a>
+      
+        <a class="list-group-item" href="#">
+          <span class="pull-right text-muted">392,842</span>
+          /page-title
+        </a>
+      
+        <a class="list-group-item" href="#">
+          <span class="pull-right text-muted">298,183</span>
+          /some/page-slug
+        </a>
+      
+        <a class="list-group-item" href="#">
+          <span class="pull-right text-muted">193,129</span>
+          /another/directory/and/page-title
+        </a>
+      
+        <a class="list-group-item" href="#">
+          <span class="pull-right text-muted">93,382</span>
+          /one-more/page/directory/file-name
+        </a>
+      
+    </div>
+    <a href="#" class="btn btn-primary-outline p-x">VER TODO</a>
+  </div>
+</div>
+
+    </div>
+  </div>
+
+  <div id="docsModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Example modal</h4>
+      </div>
+      <div class="modal-body">
+        <p>You're looking at an example modal in the dashboard theme.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Cool, got it!</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/chart.js"></script>
+    <script src="assets/js/tablesorter.min.js"></script>
+    <script src="assets/js/toolkit.js"></script>
+    <script src="assets/js/application.js"></script>
+    <script src="bbdd1.json"></script>
+    <script src="js/libreria.js"></script>
+    
+    <script>
+
+<!--   ONCLICK GRAPH  //->	
+		obj = document.getElementById("pie1");
+		obj.onclick = function (evt) {
+			var points = datachart.getPointsAtEvent(evt);
+			alert(chart.datasets[0].points.indexOf(points[0]));
+		};
+
+<!--   TOTAL KWH //->							
+		cont = document.getElementById("KWH");
+		var items = data;
+		KWH_val = 0;
+		for (v=0;v<(items.length);v++) {
+		  var val = items[v].Energia_activa_kWh;
+		  if(val!=undefined && val!=NaN){
+			  KWH_val = Number(KWH_val) + Number(val);
+		  }
+		}
+		cont.innerHTML= "<strong>"+currency(KWH_val)+"</strong> kWh";
+
+<!--   TOTAL MM$ //->
+		cont = document.getElementById("MM$");
+		var items = data;
+		MM$_val = 0;
+		for (v=0;v<(items.length);v++) {
+		  var val = items[v].Total_Neto;
+		  val = val.replace(' $ ','');
+  		  val = val.replace('-','');
+		  val = val.replace(/ /g,'');
+  		  val = val.replace(/,/g,'');		  
+		  if (val==""){val=0}
+		  val = parseFloat(val);
+		  if(val!=undefined && val!=NaN){
+			  MM$_val = Number(MM$_val) + Number(val);
+		  }
+		}
+		tot_MM$_val=MM$_val;
+		cont.innerHTML= "<strong>"+currency(MM$_val)+"</strong> ($)";
+
+
+<!--   DISTINCT UBICACIONES //->
+		var lookup = {};
+		var items = data;
+		var ubicacion = [];
+		
+		for (var item, i = 0; item = items[i++];) {
+		  var name = item.Zona;
+		
+		  if (!(name in lookup)) {
+			lookup[name] = 1;
+			ubicacion.push(name);
+		  }
+		}
+		ubicacion.sort();
+		ubi_tot = ubicacion.length;
+		txt="";
+		sub_ubi= document.getElementById('sub_ubi');
+		for (v=0;v<ubi_tot;v++){		
+			txt = txt + "<li style='position:relative; left:20px; padding:0px;'>";
+			txt = txt + "<div class='checkbox custom-control custom-checkbox'>";
+			txt = txt + "<label>";
+			txt = txt + "<input type='checkbox' value='"+ubicacion[v]+"' style='background-color:#FFF' onClick=filtra(this,'ubi')>";
+			txt = txt + "<span class='custom-control-indicator'></span>"+ubicacion[v];
+			txt = txt + "</label>";
+			txt = txt + "<div>";
+			txt = txt +  "</li>";
+		}
+		
+		sub_ubi.innerHTML = txt;
+
+<!--   DISTINCT ENTIDADES //->
+		var lookup = {};
+		//var items = data;
+		var entidades = [];
+		
+		for (var item, i = 0; item = items[i++];) {
+		  var name = item.Entidades;
+		
+		  if (!(name in lookup)) {
+			lookup[name] = 1;
+			entidades.push(name);
+		  }
+		}
+		entidades.sort();
+		enti_tot = entidades.length;
+		txt="";
+		sub_enti= document.getElementById('sub_enti');
+		for (v=0;v<enti_tot;v++){		
+			txt = txt + "<li style='position:relative; left:30px; padding:0px;'>";
+			txt = txt + "<div class='checkbox custom-control custom-checkbox'>";
+			txt = txt + "<label>";
+			txt = txt + "<input type='checkbox' value='"+entidades[v]+"' style='background-color:#FFF' onClick=filtra(this,'enti')>";
+			txt = txt + "<span class='custom-control-indicator'></span>"+entidades[v];
+			txt = txt + "</label>";
+			txt = txt + "<div>";
+			txt = txt +  "</li>";
+		}
+		sub_enti.innerHTML = txt;
+				
+<!--   PIE1 ENTIDADES kWh  //->
+	<!-- POCENTAJE  TOTAL kWh-->
+
+	tot_ent={};
+	per_ent={};
+	nom_ent={};
+	for (vv=0;vv<entidades.length;vv++){
+		tot_ent[vv]=0;
+		entidad=entidades[vv];	
+			for (v=0;v<(items.length);v++) {
+			  n_ent = items[v].Entidades;
+			  var val = items[v].Energia_activa_kWh;
+				if(val!=undefined && val!=NaN && n_ent==entidad){
+					tot_ent[vv]=Number(tot_ent[vv])+Number(val);
+				}
+			}
+			nom_ent[vv] = entidad;
+			per_ent[vv] = (Number(tot_ent[vv]))*100/KWH_val;
+	}
+	
+
+		
+	var ctx = $("#pie1").get(0).getContext("2d");
+	ctx.className="ex-graph";
+	var data1 = [{value:0,color:"#00ffff",highlight:"#FF5A5E",label:"Red"}];
+	var options={percentageInnerCutout: 80, segmentStrokeColor:"#252830",responsive: true, maintainAspectRatio: true}
+	window.myPieChart = new Chart(ctx).Doughnut(data1,options);
+	colors={};
+	colors[0]="#fede17";colors[1]="#f8bf0d";colors[2]="#f49d10";colors[3]="#d2922b";colors[4]="#006699";				
+	for (v=0; v<vv; v++){
+		valor = Math.round(per_ent[v]);
+		color = colors[v];
+		high = "#5AD3D1";
+		lab = nom_ent[v];
+		window.myPieChart.addData(   {
+				value: valor,
+				color: color,
+				highlight: high,
+				label: lab
+			});
+	}
+<!--   PIE2 ENTIDADES $  //->
+
+	MM$_val={};
+	per_ent={};
+	nom_ent={};
+	for (vv=0;vv<entidades.length;vv++){
+		tot_ent[vv]=0;
+		entidad=entidades[vv];
+		var items = data;
+		MM$_val[vv] = 0;
+			for (v=0;v<(items.length);v++) {
+			  var val = items[v].Total_Neto;
+			  val = val.replace(' $ ','');
+			  val = val.replace('-','');
+			  val = val.replace(/ /g,'');
+			  val = val.replace(/,/g,'');		  
+			  if (val==""){val=0}
+			  val = parseFloat(val);
+			  n_ent = items[v].Entidades
+			  if(val!=undefined && val!=NaN && n_ent==entidad){
+				  MM$_val[vv] = Number(MM$_val[vv]) + Number(val);
+			  }
+			}
+
+
+			nom_ent[vv] = entidad;
+			per_ent[vv] = (Number(MM$_val[vv])*100/tot_MM$_val);
+	}
+	
+	
+	var ctx = $("#pie2").get(0).getContext("2d");
+	ctx.className="ex-graph";
+	var data1 = [{value:0,color:"#00ffff",highlight:"#FF5A5E",label:"Red"}];
+	var options={percentageInnerCutout: 80, segmentStrokeColor:"#252830",responsive: true, maintainAspectRatio: true}
+	window.myPieChart = new Chart(ctx).Doughnut(data1,options);
+	colors={};
+	colors[0]="#fede17";colors[1]="#f8bf0d";colors[2]="#f49d10";colors[3]="#d2922b";colors[4]="#006699";				
+	for (v=0; v<vv; v++){
+		valor = Math.round(per_ent[v]);
+		color = colors[v];
+		high = "#5AD3D1";
+		lab = nom_ent[v];
+		window.myPieChart.addData(   {
+				value: valor,
+				color: color,
+				highlight: high,
+				label: lab
+			});
+	}	
+	
+<!--   PIE3 COSTO ENERGIA  //->
+
+tot_tot=0;
+tot_Costo_energia=0;
+tot_Costo_demandaFP=0;
+tot_Costo_demandaHP=0;
+tot_Cargo_MFP=0;
+tot_Otros_costos=0;
+	for (v=0;v<(items.length);v++) {
+	  var Costo_energia = items[v].Costo_energia;
+	  var Costo_demandaFP = items[v].Costo_demandaFP;
+	  var Costo_demandaHP = items[v].Costo_demandaHP;
+	  var Cargo_MFP = items[v].Cargo_MFP;
+	  var Otros_costos = items[v].Otros_costos;	  
+	  
+	  Costo_energia = Costo_energia.replace(' $ ','');
+	  Costo_energia = Costo_energia.replace('-','');
+	  Costo_energia = Costo_energia.replace(/ /g,'');
+	  Costo_energia = Costo_energia.replace(/,/g,'');		  
+	  if (Costo_energia==""){Costo_energia=0}
+	  Costo_energia = parseFloat(Costo_energia);
+	  
+	  Costo_demandaFP = Costo_demandaFP.replace(' $ ','');
+	  Costo_demandaFP = Costo_demandaFP.replace('-','');
+	  Costo_demandaFP = Costo_demandaFP.replace(/ /g,'');
+	  Costo_demandaFP = Costo_demandaFP.replace(/,/g,'');		  
+	  if (Costo_demandaFP==""){Costo_demandaFP=0}
+	  Costo_demandaFP = parseFloat(Costo_demandaFP);
+	  
+	  Costo_demandaHP = Costo_demandaHP.replace(' $ ','');
+	  Costo_demandaHP = Costo_demandaHP.replace('-','');
+	  Costo_demandaHP = Costo_demandaHP.replace(/ /g,'');
+	  Costo_demandaHP = Costo_demandaHP.replace(/,/g,'');		  
+	  if (Costo_demandaHP==""){Costo_demandaHP=0}
+	  Costo_demandaHP = parseFloat(Costo_demandaHP);
+	  
+	  Cargo_MFP = Cargo_MFP.replace(' $ ','');
+	  Cargo_MFP = Cargo_MFP.replace('-','');
+	  Cargo_MFP = Cargo_MFP.replace(/ /g,'');
+	  Cargo_MFP = Cargo_MFP.replace(/,/g,'');		  
+	  if (Cargo_MFP==""){Cargo_MFP=0}
+	  Cargo_MFP = parseFloat(Cargo_MFP);
+	  
+	  Otros_costos = Otros_costos.replace(' $ ','');
+	  Otros_costos = Otros_costos.replace('-','');
+	  Otros_costos = Otros_costos.replace(/ /g,'');
+	  Otros_costos = Otros_costos.replace(/,/g,'');		  
+	  if (Otros_costos==""){Otros_costos=0}
+	  Otros_costos = parseFloat(Otros_costos);	  	  	  	  
+	  
+//Costo_energia  Costo_demandaFP  Costo_demandaHP  Cargo_MFP Otros_costos	  
+	  if(Costo_energia!=undefined && Costo_energia!=NaN){
+		  tot_Costo_energia = Number(tot_Costo_energia) + Number(Costo_energia);
+		  tot_tot = tot_tot + tot_Costo_energia;
+	  }
+	  if(Costo_demandaFP!=undefined && Costo_demandaFP!=NaN){
+		  tot_Costo_demandaFP = Number(tot_Costo_demandaFP) + Number(Costo_demandaFP);
+		  tot_tot = tot_tot + tot_Costo_demandaFP;
+	  }
+	  if(Costo_demandaHP!=undefined && Costo_demandaHP!=NaN){
+		  tot_Costo_demandaHP = Number(tot_Costo_demandaHP) + Number(Costo_demandaHP);
+		  tot_tot = tot_tot + tot_Costo_demandaHP;
+	  }
+	  if(Cargo_MFP!=undefined && Cargo_MFP!=NaN){
+		  tot_Cargo_MFP = Number(tot_Cargo_MFP) + Number(Cargo_MFP);
+		  tot_tot = tot_tot + tot_Cargo_MFP;
+	  }
+	  if(Otros_costos!=undefined && Otros_costos!=NaN){
+		  tot_Otros_costos = Number(tot_Otros_costos) + Number(Otros_costos);
+		  tot_tot = tot_tot + tot_Otros_costos;
+	  }	  	  	  	  
+	}
+
+
+	var ctx = $("#pie3").get(0).getContext("2d");
+	ctx.className="ex-graph";
+	var data1 = [{value:0,color:"#00ffff",highlight:"#FF5A5E",label:"Red"}];
+	var options={percentageInnerCutout: 80, segmentStrokeColor:"#252830",responsive: true, maintainAspectRatio: true}
+	window.myPieChart = new Chart(ctx).Doughnut(data1,options);
+	
+colors[3]="#d2922b";colors[4]="#006699";				
+//Costo_energia  Costo_demandaFP  Costo_demandaHP  Cargo_MFP Otros_costos	  
+		valor = tot_Costo_energia;
+		color = "#fede17";
+		high = "#5AD3D1";
+		lab = "Costo_energia";
+		window.myPieChart.addData(   {
+				value: valor,
+				color: color,
+				highlight: high,
+				label: lab
+			});
+		valor = tot_Costo_demandaFP;
+		color = "#f8bf0d";
+		high = "#5AD3D1";
+		lab = "Costo_DemandaFP";
+		window.myPieChart.addData(   {
+				value: valor,
+				color: color,
+				highlight: high,
+				label: lab
+			});	
+		valor = tot_Costo_demandaHP;
+		color = "#f49d10";
+		high = "#5AD3D1";
+		lab = "Costo_DemandaHP";
+		window.myPieChart.addData(   {
+				value: valor,
+				color: color,
+				highlight: high,
+				label: lab
+			});	
+		valor = tot_Cargo_MFP;
+		color = "#d2922b";
+		high = "#5AD3D1";
+		lab = "Cargo_MFP";
+		window.myPieChart.addData(   {
+				value: valor,
+				color: color,
+				highlight: high,
+				label: lab
+			});	
+		valor = tot_Otros_costos;
+		color = "#006699";
+		high = "#5AD3D1";
+		lab = "Otros_costos";
+		window.myPieChart.addData(   {
+				value: valor,
+				color: color,
+				highlight: high,
+				label: lab
+			});				
+											
+
+
+
+<!--   DISTINCT METROS //->		
+		txt="";
+		sub_metr= document.getElementById('sub_metr');
+		
+			txt = txt + "<li style='position:relative; left:30px; padding:0px;'>";
+			txt = txt + "<div class='checkbox custom-control custom-checkbox'>";
+			txt = txt + "<label>";
+			txt = txt + "<input type='checkbox' value='0-100' style='background-color:#FFF' onClick=filtra(this,'metr')>";
+			txt = txt + "<span class='custom-control-indicator'></span> 0-100";
+			txt = txt + "</label>";
+			txt = txt + "<div>";
+			txt = txt +  "</li>";
+			txt = txt + "<li style='position:relative; left:30px; padding:0px;'>";
+			txt = txt + "<div class='checkbox custom-control custom-checkbox'>";
+			txt = txt + "<label>";
+			txt = txt + "<input type='checkbox' value='100-200' style='background-color:#FFF' onClick=filtra(this,'metr')>";
+			txt = txt + "<span class='custom-control-indicator'></span> 100-200";
+			txt = txt + "</label>";
+			txt = txt + "<div>";
+			txt = txt +  "</li>";
+			txt = txt + "<li style='position:relative; left:30px; padding:0px;'>";
+			txt = txt + "<div class='checkbox custom-control custom-checkbox'>";
+			txt = txt + "<label>";
+			txt = txt + "<input type='checkbox' value='200-300' style='background-color:#FFF' onClick=filtra(this,'metr')>";
+			txt = txt + "<span class='custom-control-indicator'></span>200-300";
+			txt = txt + "</label>";
+			txt = txt + "<div>";
+			txt = txt +  "</li>";					
+			txt = txt + "<li style='position:relative; left:30px; padding:0px;'>";
+			txt = txt + "<div class='checkbox custom-control custom-checkbox'>";
+			txt = txt + "<label>";
+			txt = txt + "<input type='checkbox' value='300-500' style='background-color:#FFF' onClick=filtra(this,'metr')>";
+			txt = txt + "<span class='custom-control-indicator'></span>300-500";
+			txt = txt + "</label>";
+			txt = txt + "<div>";
+			txt = txt +  "</li>";
+			txt = txt + "<li style='position:relative; left:30px; padding:0px;'>";
+			txt = txt + "<div class='checkbox custom-control custom-checkbox'>";
+			txt = txt + "<label>";
+			txt = txt + "<input type='checkbox' value='500-700' style='background-color:#FFF' onClick=filtra(this,'metr')>";
+			txt = txt + "<span class='custom-control-indicator'></span>500-700";
+			txt = txt + "</label>";
+			txt = txt + "<div>";
+			txt = txt +  "</li>";
+			txt = txt + "<li style='position:relative; left:30px; padding:0px;'>";
+			txt = txt + "<div class='checkbox custom-control custom-checkbox'>";
+			txt = txt + "<label>";
+			txt = txt + "<input type='checkbox' value='700-1000' style='background-color:#FFF' onClick=filtra(this,'metr')>";
+			txt = txt + "<span class='custom-control-indicator'></span>700-1000";
+			txt = txt + "</label>";
+			txt = txt + "<div>";
+			txt = txt +  "</li>";								
+		sub_metr.innerHTML = txt;		
+
+<!--   DISTINCT AGNO //->
+		txt="";
+		sub_agno= document.getElementById('sub_agno');
+		
+			txt = txt + "<li style='position:relative; left:30px; padding:0px;'>";
+			txt = txt + "<div class='checkbox custom-control custom-checkbox'>";
+			txt = txt + "<label>";
+			txt = txt + "<input type='checkbox' value='<1950' style='background-color:#FFF' onClick=filtra(this,'agno')>";
+			txt = txt + "<span class='custom-control-indicator'></span> <1950";
+			txt = txt + "</label>";
+			txt = txt + "<div>";
+			txt = txt +  "</li>";
+			txt = txt + "<li style='position:relative; left:30px; padding:0px;'>";
+			txt = txt + "<div class='checkbox custom-control custom-checkbox'>";
+			txt = txt + "<label>";
+			txt = txt + "<input type='checkbox' value='1950-1960' style='background-color:#FFF' onClick=filtra(this,'agno')>";
+			txt = txt + "<span class='custom-control-indicator'></span> 1950-1960";
+			txt = txt + "</label>";
+			txt = txt + "<div>";
+			txt = txt +  "</li>";
+			txt = txt + "<li style='position:relative; left:30px; padding:0px;'>";
+			txt = txt + "<div class='checkbox custom-control custom-checkbox'>";
+			txt = txt + "<label>";
+			txt = txt + "<input type='checkbox' value='1960-1970' style='background-color:#FFF' onClick=filtra(this,'agno')>";
+			txt = txt + "<span class='custom-control-indicator'></span> 1960-1970";
+			txt = txt + "</label>";
+			txt = txt + "<div>";
+			txt = txt +  "</li>";					
+			txt = txt + "<li style='position:relative; left:30px; padding:0px;'>";
+			txt = txt + "<div class='checkbox custom-control custom-checkbox'>";
+			txt = txt + "<label>";
+			txt = txt + "<input type='checkbox' value='1970-1980' style='background-color:#FFF' onClick=filtra(this,'agno')>";
+			txt = txt + "<span class='custom-control-indicator'></span> 1970-1980";
+			txt = txt + "</label>";
+			txt = txt + "<div>";
+			txt = txt +  "</li>";
+			txt = txt + "<li style='position:relative; left:30px; padding:0px;'>";
+			txt = txt + "<div class='checkbox custom-control custom-checkbox'>";
+			txt = txt + "<label>";
+			txt = txt + "<input type='checkbox' value='1980-1990' style='background-color:#FFF' onClick=filtra(this,'agno')>";
+			txt = txt + "<span class='custom-control-indicator'></span> 1980-1990";
+			txt = txt + "</label>";
+			txt = txt + "<div>";
+			txt = txt +  "</li>";
+			txt = txt + "<li style='position:relative; left:30px; padding:0px;'>";
+			txt = txt + "<div class='checkbox custom-control custom-checkbox'>";
+			txt = txt + "<label>";
+			txt = txt + "<input type='checkbox' value='1990-2000' style='background-color:#FFF' onClick=filtra(this,'agno')>";
+			txt = txt + "<span class='custom-control-indicator'></span> 1990-2000";
+			txt = txt + "</label>";
+			txt = txt + "<div>";
+			txt = txt +  "</li>";								
+			txt = txt + "<li style='position:relative; left:30px; padding:0px;'>";
+			txt = txt + "<div class='checkbox custom-control custom-checkbox'>";
+			txt = txt + "<label>";
+			txt = txt + "<input type='checkbox' value='2000-2010' style='background-color:#FFF' onClick=filtra(this,'agno')>";
+			txt = txt + "<span class='custom-control-indicator'></span> 2000-2010";
+			txt = txt + "</label>";
+			txt = txt + "<div>";
+			txt = txt +  "</li>";								
+			txt = txt + "<li style='position:relative; left:30px; padding:0px;'>";
+			txt = txt + "<div class='checkbox custom-control custom-checkbox'>";
+			txt = txt + "<label>";
+			txt = txt + "<input type='checkbox' value='2010<' style='background-color:#FFF' onClick=filtra(this,'agno')>";
+			txt = txt + "<span class='custom-control-indicator'></span> 2010<";
+			txt = txt + "</label>";
+			txt = txt + "<div>";
+			txt = txt +  "</li>";								
+		sub_agno.innerHTML = txt;		
+			
+		
+	</script>
+    <script>
+      // execute/clear BS loaders for docs
+      $(function(){while(window.BS&&window.BS.loader&&window.BS.loader.length){(window.BS.loader.pop())()}})
+    </script>
+    <script>
+		var datos = "[{ value: 210, color: '#1bc98e', label: 'Alumbrado Público' }, { value: 130, color: '#1ca8dd', label: 'Colegios' },{ value: 20, color: '#e64e25', label: 'Edificios Municipales' }]";
+    </script>
+  </body>
+</html>
+

@@ -1,8 +1,5 @@
-
-
-
-<!DOCTYPE html>
-<html lang="en">
+<!doctype html>
+<html>
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -56,8 +53,7 @@
 				<a href="javascript:;" data-toggle="collapse" data-target="#sub_ubi"><span style="position:relative; float:right;z-index:10;"><img id="img_ubi" src="img/off.png" width="30" height="17" alt="on"></span><i class="icon-map-marker" style="font-size:20px;"></i>&nbsp;&nbsp;Ubicación</a>
 			</li> 
 					<ul id="sub_ubi" class="collapse" style="background-color:#E6E7E8; color:#2c3a52; list-style:none; padding:5px;">
-                    </ul>
-                   
+					</ul>
 			<li id="entidades" onClick="sel(this)">
 			  <a href="javascript:;" data-toggle="collapse" data-target="#sub_enti"><div style="position:relative; float:right;z-index:10;"><img id="img_enti" src="img/off.png" width="30" height="17" alt="off"></div><i class="icon-building"></i>&nbsp;&nbsp;Entidades</a></li>
 					<ul id="sub_enti" class="collapse" style="background-color:#E6E7E8; color:#2c3a52; list-style:none; padding:5px;">
@@ -153,7 +149,16 @@
   <h3 class="hr-divider-content hr-divider-heading">CONSUMO ANUAL</h3>
 </div>
 <div style="width:100%; min-height:300px;">
-  <id id="anual" width="600" height="400"></id>
+    <canvas
+    class="ex-line-graph"
+    width="600" height="400"
+    data-chart="bar"
+    data-scale-line-color="transparent"
+    data-scale-grid-line-color="rgba(255,255,255,.05)"
+    data-scale-font-color="#a2a2a2"
+    data-labels="['NOV','DIC','ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV']"
+    data-value="[{ label: 'KWH',fillColor:'#dbe10b', data: [65, 59, 80, 81, 56, 55, 40, 22, 10, 98, 70, 24,34] },{ label: 'MM$',fillColor:'#de242b',data: [28, 48, 40, 19, 86, 27, 90, 22, 35, 90, 34, 33, 20] }]">
+  </canvas>
   </div>
 <div class="hr-divider m-t-md m-b">
   <h3 class="hr-divider-content hr-divider-heading">COMPORTAMIENTO DE CONSUMO</h3>
@@ -348,62 +353,10 @@
 </div>
 
 <div class="list-group">
-  <h4 class="list-group-header">
-    Devices and resolutions
-  </h4>
-  
-    <a class="list-group-item" href="#">
-      <span class="pull-right text-muted">3,929,481</span>
-      Desktop (1920x1080)
-    </a>
-  
-    <a class="list-group-item" href="#">
-      <span class="pull-right text-muted">1,143,393</span>
-      Desktop (1366x768)
-    </a>
-  
-    <a class="list-group-item" href="#">
-      <span class="pull-right text-muted">938,287</span>
-      Desktop (1440x900)
-    </a>
-  
-    <a class="list-group-item" href="#">
-      <span class="pull-right text-muted">749,393</span>
-      Desktop (1280x800)
-    </a>
-  
-    <a class="list-group-item" href="#">
-      <span class="pull-right text-muted">695,912</span>
-      Tablet (1024x768)
-    </a>
-  
-    <a class="list-group-item" href="#">
-      <span class="pull-right text-muted">501,938</span>
-      Tablet (768x1024)
-    </a>
-  
-    <a class="list-group-item" href="#">
-      <span class="pull-right text-muted">392,842</span>
-      Phone (320x480)
-    </a>
-  
-    <a class="list-group-item" href="#">
-      <span class="pull-right text-muted">298,183</span>
-      Phone (720x450)
-    </a>
-  
-    <a class="list-group-item" href="#">
-      <span class="pull-right text-muted">193,129</span>
-      Desktop (2560x1080)
-    </a>
-  
-    <a class="list-group-item" href="#">
-      <span class="pull-right text-muted">93,382</span>
-      Desktop (2560x1600)
-    </a>
-  
+  <h4 class="list-group-header">&nbsp;</h4>
 </div>
-<a href="#" class="btn btn-primary-outline p-x">View all devices</a>
+
+
 
       </div>
     </div>
@@ -433,30 +386,52 @@
     <script src="assets/js/tablesorter.min.js"></script>
     <script src="assets/js/toolkit.js"></script>
     <script src="assets/js/application.js"></script>
-    <script src="bbdd1.json"></script>
+    <script src="../bbdd1.json"></script>
     <script src="js/libreria.js"></script>
 	<script type="text/javascript" src="js/high/highcharts.js"></script>    
     
     <script>
 
-<!--   ONCLICK GRAPH  //->	
-		obj = document.getElementById("pie1");
-		obj.onclick = function (evt) {
-			var points = datachart.getPointsAtEvent(evt);
-			alert(chart.datasets[0].points.indexOf(points[0]));
-		};
 
-<!--   TOTAL KWH //->							
+
+<!--   TOTAL KWH //->
+total_KWH('','','','');
+function total_KWH(f1,f2,f3,f4){
+		//alert(f2);					
 		cont = document.getElementById("KWH");
 		var items = data;
 		KWH_val = 0;
-		for (v=0;v<(items.length);v++) {
+		for (v=0;v<(items.length);v++) {	
 		  var val = items[v].Energia_activa_kWh;
 		  if(val!=undefined && val!=NaN){
-			  KWH_val = Number(KWH_val) + Number(val);
+			  if(f1.length==0 && f2.length==0 && f3.length==0 && f4.length==0){
+			  	KWH_val = Number(KWH_val) + Number(val);
+			  }else{
+					for(f=0;f<f1.length;f++){
+						ff = f1[f];
+						alert(ff);
+						if (items[v].Zona==ff){tot_ent[vv]=Number(tot_ent[vv])+Number(val);}
+					}
+					for(f=0;f<f2.length;f++){
+						ff = f2[f];
+						if (items[v].Entidades==ff){tot_ent[vv]=Number(tot_ent[vv])+Number(val);}
+					}
+					for(f=0;f<f3.length;f++){
+						ff = f3[f];
+						if (items[v].superficie==ff){
+							tot_ent[vv]=Number(tot_ent[vv])+Number(val);
+							}
+					}
+					for(f=0;f<f4.length;f++){
+						ff = f4[f];
+						if (items[v].apertura==ff){tot_ent[vv]=Number(tot_ent[vv])+Number(val);}
+					}																						  	
+		  }
 		  }
 		}
+		currency(KWH_val);
 		cont.innerHTML= "<strong>"+currency(KWH_val)+"</strong> kWh";
+}
 
 <!--   TOTAL MM$ //->
 		cont = document.getElementById("MM$");
@@ -540,6 +515,8 @@
 <!--   PIE1 ENTIDADES kWh  //->
 	<!-- POCENTAJE  TOTAL kWh-->
 
+pie1('','','','');
+function pie1(f1,f2,f3,f4){
 	tot_ent={};
 	per_ent={};
 	nom_ent={};
@@ -550,7 +527,30 @@
 			  n_ent = items[v].Entidades;
 			  var val = items[v].Energia_activa_kWh;
 				if(val!=undefined && val!=NaN && n_ent==entidad){
-					tot_ent[vv]=Number(tot_ent[vv])+Number(val);
+					if(f1.length==0 && f2.length==0 && f3.length==0 && f4.length==0){
+						tot_ent[vv]=Number(tot_ent[vv])+Number(val);
+					}else{
+						for(f=0;f<f1.length;f++){
+							ff = f1[f];
+							//alert(ff);
+							if (items[v].Zona==ff){tot_ent[vv]=Number(tot_ent[vv])+Number(val);}
+						}
+						for(f=0;f<f2.length;f++){
+							ff = f2[f];
+							if (items[v].Entidades==ff){tot_ent[vv]=Number(tot_ent[vv])+Number(val);}
+						}
+						for(f=0;f<f3.length;f++){
+							ff = f3[f];
+							if (items[v].superficie==ff){
+								tot_ent[vv]=Number(tot_ent[vv])+Number(val);
+								}
+						}
+						for(f=0;f<f4.length;f++){
+							ff = f4[f];
+							if (items[v].apertura==ff){tot_ent[vv]=Number(tot_ent[vv])+Number(val);}
+						}																			
+					}
+					
 				}
 			}
 			nom_ent[vv] = entidad;
@@ -571,6 +571,8 @@
 		color = colors[v];
 		high = "#5AD3D1";
 		lab = nom_ent[v];
+		//lab = tot_ent[v];
+		//valor = tot_ent[v];
 		window.myPieChart.addData(   {
 				value: valor,
 				color: color,
@@ -578,8 +580,19 @@
 				label: lab
 			});
 	}
+	return;
+}
+
+		<!--   ONCLICK GRAPH  //->	
+		obj = document.getElementById("pie1");
+		obj.onclick = function (evt) {
+			var points = myPieChart.getPointsAtEvent(evt);
+			alert(chart.datasets[0].points.indexOf(points[0]));
+		};
 <!--   PIE2 ENTIDADES $  //->
 
+pie2('','','','');
+function pie2(f1,f2,f3,f4){
 	MM$_val={};
 	per_ent={};
 	nom_ent={};
@@ -627,139 +640,143 @@
 				label: lab
 			});
 	}	
+}
 	
 <!--   PIE3 COSTO ENERGIA  //->
+pie3('','','','');
+function pie3(f1,f2,f3,f4){
+		tot_tot=0;
+		tot_Costo_energia=0;
+		tot_Costo_demandaFP=0;
+		tot_Costo_demandaHP=0;
+		tot_Cargo_MFP=0;
+		tot_Otros_costos=0;
+			for (v=0;v<(items.length);v++) {
+			  var Costo_energia = items[v].Costo_energia;
+			  var Costo_demandaFP = items[v].Costo_demandaFP;
+			  var Costo_demandaHP = items[v].Costo_demandaHP;
+			  var Cargo_MFP = items[v].Cargo_MFP;
+			  var Otros_costos = items[v].Otros_costos;	  
+			  
+			  Costo_energia = Costo_energia.replace(' $ ','');
+			  Costo_energia = Costo_energia.replace('-','');
+			  Costo_energia = Costo_energia.replace(/ /g,'');
+			  Costo_energia = Costo_energia.replace(/,/g,'');		  
+			  if (Costo_energia==""){Costo_energia=0}
+			  Costo_energia = parseFloat(Costo_energia);
+			  
+			  Costo_demandaFP = Costo_demandaFP.replace(' $ ','');
+			  Costo_demandaFP = Costo_demandaFP.replace('-','');
+			  Costo_demandaFP = Costo_demandaFP.replace(/ /g,'');
+			  Costo_demandaFP = Costo_demandaFP.replace(/,/g,'');		  
+			  if (Costo_demandaFP==""){Costo_demandaFP=0}
+			  Costo_demandaFP = parseFloat(Costo_demandaFP);
+			  
+			  Costo_demandaHP = Costo_demandaHP.replace(' $ ','');
+			  Costo_demandaHP = Costo_demandaHP.replace('-','');
+			  Costo_demandaHP = Costo_demandaHP.replace(/ /g,'');
+			  Costo_demandaHP = Costo_demandaHP.replace(/,/g,'');		  
+			  if (Costo_demandaHP==""){Costo_demandaHP=0}
+			  Costo_demandaHP = parseFloat(Costo_demandaHP);
+			  
+			  Cargo_MFP = Cargo_MFP.replace(' $ ','');
+			  Cargo_MFP = Cargo_MFP.replace('-','');
+			  Cargo_MFP = Cargo_MFP.replace(/ /g,'');
+			  Cargo_MFP = Cargo_MFP.replace(/,/g,'');		  
+			  if (Cargo_MFP==""){Cargo_MFP=0}
+			  Cargo_MFP = parseFloat(Cargo_MFP);
+			  
+			  Otros_costos = Otros_costos.replace(' $ ','');
+			  Otros_costos = Otros_costos.replace('-','');
+			  Otros_costos = Otros_costos.replace(/ /g,'');
+			  Otros_costos = Otros_costos.replace(/,/g,'');		  
+			  if (Otros_costos==""){Otros_costos=0}
+			  Otros_costos = parseFloat(Otros_costos);	  	  	  	  
+			  
+		//Costo_energia  Costo_demandaFP  Costo_demandaHP  Cargo_MFP Otros_costos	  
+			  if(Costo_energia!=undefined && Costo_energia!=NaN){
+				  tot_Costo_energia = Number(tot_Costo_energia) + Number(Costo_energia);
+				  tot_tot = tot_tot + tot_Costo_energia;
+			  }
+			  if(Costo_demandaFP!=undefined && Costo_demandaFP!=NaN){
+				  tot_Costo_demandaFP = Number(tot_Costo_demandaFP) + Number(Costo_demandaFP);
+				  tot_tot = tot_tot + tot_Costo_demandaFP;
+			  }
+			  if(Costo_demandaHP!=undefined && Costo_demandaHP!=NaN){
+				  tot_Costo_demandaHP = Number(tot_Costo_demandaHP) + Number(Costo_demandaHP);
+				  tot_tot = tot_tot + tot_Costo_demandaHP;
+			  }
+			  if(Cargo_MFP!=undefined && Cargo_MFP!=NaN){
+				  tot_Cargo_MFP = Number(tot_Cargo_MFP) + Number(Cargo_MFP);
+				  tot_tot = tot_tot + tot_Cargo_MFP;
+			  }
+			  if(Otros_costos!=undefined && Otros_costos!=NaN){
+				  tot_Otros_costos = Number(tot_Otros_costos) + Number(Otros_costos);
+				  tot_tot = tot_tot + tot_Otros_costos;
+			  }	  	  	  	  
+			}
+		
+		
+			var ctx = $("#pie3").get(0).getContext("2d");
+			ctx.className="ex-graph";
+			var data1 = [{value:0,color:"#00ffff",highlight:"#FF5A5E",label:"Red"}];
+			var options={percentageInnerCutout: 80, segmentStrokeColor:"#FFF",responsive: true, maintainAspectRatio: true}
+			window.myPieChart = new Chart(ctx).Doughnut(data1,options);
+			
+		colors[3]="#d2922b";colors[4]="#006699";				
+		//Costo_energia  Costo_demandaFP  Costo_demandaHP  Cargo_MFP Otros_costos	  
+				valor = tot_Costo_energia;
+				color = "#fede17";
+				high = "#5AD3D1";
+				lab = "Costo_energia";
+				window.myPieChart.addData(   {
+						value: valor,
+						color: color,
+						highlight: high,
+						label: lab
+					});
+				valor = tot_Costo_demandaFP;
+				color = "#f8bf0d";
+				high = "#5AD3D1";
+				lab = "Costo_DemandaFP";
+				window.myPieChart.addData(   {
+						value: valor,
+						color: color,
+						highlight: high,
+						label: lab
+					});	
+				valor = tot_Costo_demandaHP;
+				color = "#f49d10";
+				high = "#5AD3D1";
+				lab = "Costo_DemandaHP";
+				window.myPieChart.addData(   {
+						value: valor,
+						color: color,
+						highlight: high,
+						label: lab
+					});	
+				valor = tot_Cargo_MFP;
+				color = "#d2922b";
+				high = "#5AD3D1";
+				lab = "Cargo_MFP";
+				window.myPieChart.addData(   {
+						value: valor,
+						color: color,
+						highlight: high,
+						label: lab
+					});	
+				valor = tot_Otros_costos;
+				color = "#006699";
+				high = "#5AD3D1";
+				lab = "Otros_costos";
+				window.myPieChart.addData(   {
+						value: valor,
+						color: color,
+						highlight: high,
+						label: lab
+					});				
+}
 
-tot_tot=0;
-tot_Costo_energia=0;
-tot_Costo_demandaFP=0;
-tot_Costo_demandaHP=0;
-tot_Cargo_MFP=0;
-tot_Otros_costos=0;
-	for (v=0;v<(items.length);v++) {
-	  var Costo_energia = items[v].Costo_energia;
-	  var Costo_demandaFP = items[v].Costo_demandaFP;
-	  var Costo_demandaHP = items[v].Costo_demandaHP;
-	  var Cargo_MFP = items[v].Cargo_MFP;
-	  var Otros_costos = items[v].Otros_costos;	  
-	  
-	  Costo_energia = Costo_energia.replace(' $ ','');
-	  Costo_energia = Costo_energia.replace('-','');
-	  Costo_energia = Costo_energia.replace(/ /g,'');
-	  Costo_energia = Costo_energia.replace(/,/g,'');		  
-	  if (Costo_energia==""){Costo_energia=0}
-	  Costo_energia = parseFloat(Costo_energia);
-	  
-	  Costo_demandaFP = Costo_demandaFP.replace(' $ ','');
-	  Costo_demandaFP = Costo_demandaFP.replace('-','');
-	  Costo_demandaFP = Costo_demandaFP.replace(/ /g,'');
-	  Costo_demandaFP = Costo_demandaFP.replace(/,/g,'');		  
-	  if (Costo_demandaFP==""){Costo_demandaFP=0}
-	  Costo_demandaFP = parseFloat(Costo_demandaFP);
-	  
-	  Costo_demandaHP = Costo_demandaHP.replace(' $ ','');
-	  Costo_demandaHP = Costo_demandaHP.replace('-','');
-	  Costo_demandaHP = Costo_demandaHP.replace(/ /g,'');
-	  Costo_demandaHP = Costo_demandaHP.replace(/,/g,'');		  
-	  if (Costo_demandaHP==""){Costo_demandaHP=0}
-	  Costo_demandaHP = parseFloat(Costo_demandaHP);
-	  
-	  Cargo_MFP = Cargo_MFP.replace(' $ ','');
-	  Cargo_MFP = Cargo_MFP.replace('-','');
-	  Cargo_MFP = Cargo_MFP.replace(/ /g,'');
-	  Cargo_MFP = Cargo_MFP.replace(/,/g,'');		  
-	  if (Cargo_MFP==""){Cargo_MFP=0}
-	  Cargo_MFP = parseFloat(Cargo_MFP);
-	  
-	  Otros_costos = Otros_costos.replace(' $ ','');
-	  Otros_costos = Otros_costos.replace('-','');
-	  Otros_costos = Otros_costos.replace(/ /g,'');
-	  Otros_costos = Otros_costos.replace(/,/g,'');		  
-	  if (Otros_costos==""){Otros_costos=0}
-	  Otros_costos = parseFloat(Otros_costos);	  	  	  	  
-	  
-//Costo_energia  Costo_demandaFP  Costo_demandaHP  Cargo_MFP Otros_costos	  
-	  if(Costo_energia!=undefined && Costo_energia!=NaN){
-		  tot_Costo_energia = Number(tot_Costo_energia) + Number(Costo_energia);
-		  tot_tot = tot_tot + tot_Costo_energia;
-	  }
-	  if(Costo_demandaFP!=undefined && Costo_demandaFP!=NaN){
-		  tot_Costo_demandaFP = Number(tot_Costo_demandaFP) + Number(Costo_demandaFP);
-		  tot_tot = tot_tot + tot_Costo_demandaFP;
-	  }
-	  if(Costo_demandaHP!=undefined && Costo_demandaHP!=NaN){
-		  tot_Costo_demandaHP = Number(tot_Costo_demandaHP) + Number(Costo_demandaHP);
-		  tot_tot = tot_tot + tot_Costo_demandaHP;
-	  }
-	  if(Cargo_MFP!=undefined && Cargo_MFP!=NaN){
-		  tot_Cargo_MFP = Number(tot_Cargo_MFP) + Number(Cargo_MFP);
-		  tot_tot = tot_tot + tot_Cargo_MFP;
-	  }
-	  if(Otros_costos!=undefined && Otros_costos!=NaN){
-		  tot_Otros_costos = Number(tot_Otros_costos) + Number(Otros_costos);
-		  tot_tot = tot_tot + tot_Otros_costos;
-	  }	  	  	  	  
-	}
-
-
-	var ctx = $("#pie3").get(0).getContext("2d");
-	ctx.className="ex-graph";
-	var data1 = [{value:0,color:"#00ffff",highlight:"#FF5A5E",label:"Red"}];
-	var options={percentageInnerCutout: 80, segmentStrokeColor:"#FFF",responsive: true, maintainAspectRatio: true}
-	window.myPieChart = new Chart(ctx).Doughnut(data1,options);
-	
-colors[3]="#d2922b";colors[4]="#006699";				
-//Costo_energia  Costo_demandaFP  Costo_demandaHP  Cargo_MFP Otros_costos	  
-		valor = tot_Costo_energia;
-		color = "#fede17";
-		high = "#5AD3D1";
-		lab = "Costo_energia";
-		window.myPieChart.addData(   {
-				value: valor,
-				color: color,
-				highlight: high,
-				label: lab
-			});
-		valor = tot_Costo_demandaFP;
-		color = "#f8bf0d";
-		high = "#5AD3D1";
-		lab = "Costo_DemandaFP";
-		window.myPieChart.addData(   {
-				value: valor,
-				color: color,
-				highlight: high,
-				label: lab
-			});	
-		valor = tot_Costo_demandaHP;
-		color = "#f49d10";
-		high = "#5AD3D1";
-		lab = "Costo_DemandaHP";
-		window.myPieChart.addData(   {
-				value: valor,
-				color: color,
-				highlight: high,
-				label: lab
-			});	
-		valor = tot_Cargo_MFP;
-		color = "#d2922b";
-		high = "#5AD3D1";
-		lab = "Cargo_MFP";
-		window.myPieChart.addData(   {
-				value: valor,
-				color: color,
-				highlight: high,
-				label: lab
-			});	
-		valor = tot_Otros_costos;
-		color = "#006699";
-		high = "#5AD3D1";
-		lab = "Otros_costos";
-		window.myPieChart.addData(   {
-				value: valor,
-				color: color,
-				highlight: high,
-				label: lab
-			});				
 											
 <!--   ANUAL kW_DFP//->
 
@@ -772,7 +789,7 @@ pr_ENE=[];pr_ENE=[];pr_FEB=[];pr_MAR=[];pr_ABR=[];pr_MAY=[];pr_JUN=[];pr_JUL=[];
 		tot_ENE[vv]=0;tot_FEB[vv]=0;tot_MAR[vv] = 0;tot_ABR[vv] = 0;tot_MAY[vv] = 0;tot_JUN[vv] = 0;tot_JUL[vv] = 0;tot_AGO[vv] = 0;tot_SEP[vv] = 0;tot_OCT[vv] = 0;tot_NOV[vv] = 0;tot_DIC[vv]=0;
 		pr_ENE[vv]=0;pr_FEB[vv]=0;pr_MAR[vv]=0;pr_ABR[vv]=0;pr_MAY[vv] =0;pr_JUN[vv] = [];pr_JUL[vv] =0;pr_AGO[vv] = 0;pr_SEP[vv] =0;pr_OCT[vv] = 0;pr_NOV[vv] =0;pr_DIC[vv]=0;
 		fprom = 0;
-		alert(items.length);
+
 		for (v=0;v<items.length;v++) {
 		  var val = items[v].costo_kW_DFP;
 		 // val = parseFloat(val);
@@ -806,9 +823,11 @@ pr_ENE=[];pr_ENE=[];pr_FEB=[];pr_MAR=[];pr_ABR=[];pr_MAY=[];pr_JUN=[];pr_JUL=[];
 		  pr_OCT[vv] = tot_OCT[vv]/fprom;
 		  pr_NOV[vv] = tot_NOV[vv]/fprom;
 		  pr_DIC[vv] = tot_DIC[vv]/fprom;
-		  alert(pr_DIC[vv]);
+		 
+		 // alert(pr_DIC[vv]);
 //}
 
+/*
 $(function () {
         $('#anual').highcharts({
             chart: {
@@ -847,9 +866,7 @@ $(function () {
 				labels:{
 				style:{color: '#FFFFFF'}	
 				},
-                categories: [
-                    'ENE','FEB','MAR','ABR','MAY','JUN'
-                ]
+                categories: ['ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV','DIC','ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO']
             },
             yAxis: {
 				stackLabels: {
@@ -886,15 +903,15 @@ $(function () {
                     borderWidth: 0
                 }
             },
-            series: 
-				{name: 'METROS',data:['10','20','50','234','23','1'],
-				name: 'UBI',data:['10','20','50','234','23','1']			
-				}
+            series: [
+				{name: 'METROS',data:['10','20','50','234','23','1','10','20','50','234','23','1'],
+				name: 'UBI',data:['10','20','50','234','23','1','10','20','50','234','23','1']			
+				}]
 
         });
     });	
 
-	
+*/	
 
 
 <!--   DISTINCT METROS //->		

@@ -30,7 +30,7 @@ function cerrar(obj){
 	con.style.visibility = "hidden";	
 }
 
-function filtra(obj, filtro){
+function filtra(obj, filtro){		
 	if (obj.checked==true){
 		document.getElementById("img_"+filtro).src = "img/on.png";
 		if (filtro=="ubi"){filtro_ubi.push(obj.value);}
@@ -48,7 +48,11 @@ function filtra(obj, filtro){
 	if (filtro_ubi.length==0){document.getElementById("img_ubi").src = "img/off.png";}
 	if (filtro_enti.length==0){document.getElementById("img_enti").src = "img/off.png";}
 	if (filtro_metr.length==0){document.getElementById("img_metr").src = "img/off.png";}
-	if (filtro_agno.length==0){document.getElementById("img_agno").src = "img/off.png";}	
+	if (filtro_agno.length==0){document.getElementById("img_agno").src = "img/off.png";}
+	
+
+	pie1(filtro_ubi,filtro_enti,filtro_metr,filtro_agno);
+	// total_KWH(filtro_ubi,filtro_enti,filtro_metr,filtro_agno);	
 }
 
 function removeA(arr, elem) {
