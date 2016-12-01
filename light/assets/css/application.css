@@ -26,3 +26,12 @@ hr {
 .navbar-static-top {
   border-bottom: 0;
 }
+
+a{
+  color: rgb(244,157,18);
+}
+
+a:hover {
+  color: rgb(234,85,30); 
+  background-color: rgba(244,157,18,0.5) !important;
+}
