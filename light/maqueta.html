@@ -1,0 +1,484 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="keywords" content="">
+    <meta name="author" content="">
+
+    <title>
+      
+      Compara Energía
+      
+    </title>
+
+    <link href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700,400italic" rel="stylesheet">
+    <link href="../assets/css/toolkit-light.css" rel="stylesheet">
+    <link href="../assets/css/application.css" rel="stylesheet">
+    <link href="font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+
+    <style>
+      /* note: this is a hack for ios iframe for bootstrap themes shopify page */
+      /* this chunk of css is not part of the toolkit :) */
+      body {
+        width: 1px;
+        min-width: 100%;
+        *width: 100%;
+      }
+    </style>
+  </head>
+
+
+<body style="padding-top:30px;">
+  <div class="container">
+  <div id="mapa" style="position: absolute; float: right; left: 330px; top: 110px;"></div>
+    <div class="row">
+      <div class="col-sm-3 sidebar">
+        <nav class="sidebar-nav">
+          <div class="sidebar-header" style="position:relative; height:100px;">
+            <button class="nav-toggler nav-toggler-sm sidebar-toggler" type="button" data-toggle="collapse" data-target="#nav-toggleable-sm">
+              <span class="sr-only">Toggle nav</span>
+            </button>
+            <img src="img/logo.jpg" width="223" height="75">
+          </div>
+          <div class="collapse nav-toggleable-sm" id="nav-toggleable-sm">
+            <a href="javascript:;" class="toggle" target="all" style="text-decoration: none">
+              <div class="sidebar-form" style="background-color:#F49D12; padding:10px;font-size:15px; color:#FFF;">
+                <i class='icon-home' style="font-size:20px;"></i>&nbsp;&nbsp;COMPARADOR GLOBAL
+              </div>
+            </a>
+			<ul class="nav nav-pills nav-stacked" style="clear:both;">
+			<li class="nav-header">Panel de control</li>
+			<li id="ubicacion" onClick="sel(this)">
+				<a href="javascript:;" data-toggle="collapse" data-target="#sub_ubi"><span style="position:relative; float:right;z-index:10;"><img id="img_ubi" src="img/off.png" width="30" height="17" alt="on"></span><i class="icon-map-marker" style="font-size:20px;"></i>&nbsp;&nbsp;Ubicación</a>
+			</li> 
+					<ul id="sub_ubi" class="collapse" style="background-color:#E6E7E8; color:#2c3a52; list-style:none; padding:5px;">
+					</ul>
+			<li id="entidades" onClick="sel(this)">
+			  <a href="javascript:;" data-toggle="collapse" data-target="#sub_enti"><div style="position:relative; float:right;z-index:10;"><img id="img_enti" src="img/off.png" width="30" height="17" alt="off"></div><i class="icon-building"></i>&nbsp;&nbsp;Entidades</a></li>
+					<ul id="sub_enti" class="collapse" style="background-color:#E6E7E8; color:#2c3a52; list-style:none; padding:5px;">
+					</ul>
+			<li id="metros" onClick="sel(this)">
+				<a href="javascript:;" data-toggle="collapse" data-target="#sub_metr"><div style="position:relative; float:right;z-index:10;"><img id="img_metr" src="img/off.png" width="30" height="17" alt="on"></div><i class="icon-th"></i>&nbsp;&nbsp;Metros 2</a>
+			</li>
+					<ul id="sub_metr" class="collapse" style="background-color:#E6E7E8; color:#2c3a52; list-style:none; padding:5px;">
+					</ul>
+			<li id="agno" onClick="sel(this)">
+			  <a href="javascript:;" data-toggle="collapse" data-target="#sub_agno"><div style="position:relative; float:right;z-index:10;"><img id="img_agno" src="img/off.png" width="30" height="17" alt="on"></div><i class="icon-calendar"></i>&nbsp;&nbsp;Año Construcción</a>
+			</li>
+					<ul id="sub_agno" class="collapse" style="background-color:#E6E7E8; color:#2c3a52; list-style:none; padding:5px;">
+					</ul>
+              <li class="nav-header">More</li>
+              <li >
+                <a href="javascript:;">
+                  <i class="icon-user" style="font-size:20px;"></i>&nbsp;&nbsp;Mi Cuenta
+                </a>
+              </li>
+              <li>
+                <a href="javascript:;">
+                 <i class="icon-cog" style="font-size:15px;"></i>&nbsp; Configuración</a>
+              </li>
+              <li ></li>
+              <li></li>
+            </ul>
+            <hr class="visible-xs m-t">
+    </div>
+        </nav>
+</div>
+      <div class="col-sm-9 content">
+        <div class="dashhead">
+  <div class="dashhead-titles">
+    <h6 class="dashhead-subtitle">Panel de Control</h6>
+    <h2 class="dashhead-title">Indicadores Globales</h2>
+  </div>
+
+  <div class="btn-toolbar dashhead-toolbar"></div>
+</div>
+
+<div id="mensajes" style="position:relative; padding-top:0px; margin-bottom:20px;">
+        <div id="leyenda" style="float: left; width:50%;; opacity: 0.9; z-index: 1000; color: #FFF; font-size: 14px;">
+          <div style="line-height: 150%;">
+          	<span style="font-size:16px; color:#666">
+          	  <strong>Al 21 de Noveimbre del 2016</strong></span>
+          	  <br>
+             <div style="position:relative;">
+                <div style="color:#999;">Haz consumido:</div>
+                <div id="KWH" style="color:#F90; font-size:22px;">
+                  <span class="all toggleable" style="display: 'block';">26.907.980 kWh</span>
+                  <span class="pub toggleable" style="display: none;">8.338.288 kWh</span>
+                </div>
+             </div>
+             <div style="position:relative;">
+                <div style="color:#999;">Haz gastado:</div>
+                <div id="MM$" style="color:#F90; font-size:22px;">
+                  <span class="all toggleable" style="display: 'block';">2.590,71 MM($)</span>
+                  <span class="pub toggleable" style="display: none;">769,27 MM($)</span>
+                </div>
+              </div>
+            </div>
+        </div>
+        <div id="leyenda1" style="float:left; width:50%; background-color:#E6E7E8; opacity:0.8; z-index:1000; padding:15px; color:#000; font-size:14px;">
+        <div onClick="cerrar('leyenda1')" style="position:relative; float:right; width:20px; height:20px; top:-10px; left:+10px; cursor:pointer; text-align:center;"><strong>X</strong></div>
+            <div>
+            <strong>HACE UN AÑO</strong>
+              <br>
+              Se consumía un 7% más de energía. Por lo que, se ha evitado el consumo de 150.000 kWh en este año. Esto equivale a la generación de 38 turbinas eólicas en un año. </div>
+        </div>    
+</div>
+<div style=" position:relative; float:left; width:100%; height:10px; margin-bottom:40px;"><hr class="m-t"></div>
+
+
+<div class="row text-center m-t-lg" style="line-height:100%;">
+  <div class="col-sm-4 m-b-md">
+    <div class="w-lg m-x-auto" >
+<!--       <canvas id="pie1" width="200" height="200"></canvas> -->
+      <a href="javascript:;" class="toggle" target="pub">
+        <img src="assets/img/AllBuildingEnergy.png" class="all toggleable" width="237" height="200" style="display: 'block';" />
+      </a>
+      <img src="assets/img/PubEnergy.png" class="pub toggleable" width="237" height="200" style="display: none;" />
+    </div>
+    <strong class="text-muted" style="line-height:100%;">Consumo kWh</strong>
+    <h3>Por Entidades</h3>
+  </div>
+  <div class="col-sm-4 m-b-md">
+    <div class="w-lg m-x-auto">
+<!--       <canvas id="pie2" width="200" height="200"></canvas> -->
+      <a href="javascript:;" class="toggle" target="pub">
+        <img src="assets/img/AllBuildingMoney.png" class="all toggleable" width="237" height="200" style="display: 'block';" />
+      </a>
+      <img src="assets/img/PublicMoney.png" class="pub toggleable" width="237" height="200" style="display: none;" />
+    </div>
+    <strong class="text-muted">Consumo $</strong>
+    <h3>Por Entidades</h3>
+  </div>
+  <div class="col-sm-4 m-b-md">
+    <div class="w-lg m-x-auto">
+<!--       <canvas id="pie3" width="200" height="200"></canvas> -->
+      <img src="assets/img/AllDistrib.png" class="all toggleable" width="237" height="200" style="display: 'block';" />
+      <img src="assets/img/PublicDistrib.png" class="pub toggleable" width="237" height="200" style="display: none;" />
+    </div>
+    <strong class="text-muted">Costo $</strong>
+    <h3>Demanda</h3>
+  </div>
+</div>
+<div class="hr-divider m-t-md m-b">
+  <h3 class="hr-divider-content hr-divider-heading">CONSUMO ANUAL</h3>
+</div>
+<div style="width:100%; min-height:300px;">
+    <!-- <canvas
+    class="ex-line-graph"
+    width="600" height="400"
+    data-chart="bar"
+    data-scale-line-color="transparent"
+    data-scale-grid-line-color="rgba(255,255,255,.05)"
+    data-scale-font-color="#a2a2a2"
+    data-labels="['NOV','DIC','ENE','FEB','MAR','ABR','MAY','JUN','JUL','AGO','SEP','OCT','NOV']"
+    data-value="[{ label: 'KWH',fillColor:'#dbe10b', data: [65, 59, 80, 81, 56, 55, 40, 22, 10, 98, 70, 24,34] },{ label: 'MM$',fillColor:'#de242b',data: [28, 48, 40, 19, 86, 27, 90, 22, 35, 90, 34, 33, 20] }]">
+  </canvas> -->
+  <img src="assets/img/AllMes.png" class="all toggleable" width="848" height="400" style="display: 'block';" />
+  <img src="assets/img/PublicMes.png" class="pub toggleable" width="848" height="400" style="display: none;" />
+</div>
+<div class="hr-divider m-t-md m-b">
+  <h3 class="hr-divider-content hr-divider-heading">COMPORTAMIENTO DE CONSUMO</h3>
+</div>
+
+<div class="row statcards">
+  <div class="col-sm-6 col-lg-3 m-b">
+    <div class="statcard statcard-success">
+      <div class="p-a">
+        <span class="statcard-desc">OPTIMIZARON</span>
+        <h2 class="statcard-number">
+          12,938
+          <small class="delta-indicator delta-positive">5%</small>
+        </h2>
+        <hr class="statcard-hr m-b-0">
+      </div>
+      <canvas id="sparkline1" width="378" height="94" class="sparkline" data-chart="spark-line" data-value="[{data:[28,68,41,43,96,45,100]}]" data-labels="['a','b','c','d','e','f','g']" style="width: 189px; height: 47px;"></canvas>
+    </div>
+  </div>
+  <div class="col-sm-6 col-lg-3 m-b">
+    <div class="statcard statcard-danger">
+      <div class="p-a">
+        <span class="statcard-desc">AUMENTARON</span>
+        <h2 class="statcard-number">
+          758
+          <small class="delta-indicator delta-negative">1.3%</small>
+        </h2>
+        <hr class="statcard-hr m-b-0">
+      </div>
+      <canvas id="sparkline1" width="378" height="94" class="sparkline" data-chart="spark-line" data-value="[{data:[4,34,64,27,96,50,80]}]" data-labels="['a', 'b','c','d','e','f','g']" style="width: 189px; height: 47px;"></canvas>
+    </div>
+  </div>
+  <div class="col-sm-6 col-lg-3 m-b">
+    <div class="statcard statcard-info">
+      <div class="p-a">
+        <span class="statcard-desc">MANTUVIERON</span>
+        <h2 class="statcard-number">
+          1,293
+          <small class="delta-indicator delta-positive">6.75%</small>
+        </h2>
+        <hr class="statcard-hr m-b-0">
+      </div>
+      <canvas id="sparkline1" width="378" height="94" class="sparkline" data-chart="spark-line" data-value="[{data:[12,38,32,60,36,54,68]}]" data-labels="['a', 'b','c','d','e','f','g']" style="width: 189px; height: 47px;"></canvas>
+    </div>
+  </div>
+  <div class="col-sm-6 col-lg-3 m-b">
+    <div class="statcard statcard-warning">
+      <div class="p-a">
+        <span class="statcard-desc">RIESGO DE AUMENTO</span>
+        <h2 class="statcard-number">
+          758
+          <small class="delta-indicator delta-negative">1.3%</small>
+        </h2>
+        <hr class="statcard-hr m-b-0">
+      </div>
+      <canvas id="sparkline1" width="378" height="94" class="sparkline" data-chart="spark-line" data-value="[{data:[43,48,52,58,50,95,100]}]" data-labels="['a', 'b','c','d','e','f','g']" style="width: 189px; height: 47px;"></canvas>
+    </div>
+  </div>
+</div>
+
+<hr class="m-t">
+
+<div class="row">
+  <div class="col-md-6 m-b-md">
+    <div class="list-group">
+      <h4 class="list-group-header">
+        Mayores consumos
+      </h4>
+      
+        <a class="list-group-item toggleable all otr" href="#">
+          <span class="list-group-progress" style="width: 90.2%;"></span>
+          <span class="pull-right text-muted">3156600 kWh</span>
+          Casa Matriz RM
+        </a>
+      
+        <a class="list-group-item toggleable all adm" href="#">
+          <span class="list-group-progress" style="width: 25.5%;"></span>
+          <span class="pull-right text-muted">892540</span>
+          Administración RM
+        </a>
+      
+        <a class="list-group-item toggleable all ser" href="#">
+          <span class="list-group-progress" style="width: 24.46%;"></span>
+          <span class="pull-right text-muted">856080</span>
+          Oficina de Atención Magallanes
+        </a>
+      
+        <a class="list-group-item toggleable all adm" href="#">
+          <span class="list-group-progress" style="width: 23.94%;"></span>
+          <span class="pull-right text-muted">838000</span>
+          Oficina Central
+        </a>
+      
+        <a class="list-group-item toggleable all pub" href="#">
+          <span class="list-group-progress" style="width: 18.29%;"></span>
+          <span class="pull-right text-muted">640000</span>
+          Oficina pública RM
+        </a>
+      
+        <a class="list-group-item toggleable all pub" href="#">
+          <span class="list-group-progress" style="width: 17.71%;"></span>
+          <span class="pull-right text-muted">620000</span>
+          Oficia pública VII
+        </a>
+      
+        <a class="list-group-item toggleable all pub" href="#">
+          <span class="list-group-progress" style="width: 16%;"></span>
+          <span class="pull-right text-muted">560000</span>
+          Oficina pública V
+        </a>
+      
+        <a class="list-group-item toggleable all pub" href="#">
+          <span class="list-group-progress" style="width: 13.91%;"></span>
+          <span class="pull-right text-muted">487000</span>
+          Museo Metropolitano
+        </a>
+      
+        <a class="list-group-item toggleable all pub" href="#">
+          <span class="list-group-progress" style="width: 13.57%;"></span>
+          <span class="pull-right text-muted">475000</span>
+          Casa de la Cultura Metropolitana
+        </a>
+      
+        <a class="list-group-item toggleable all pub" href="#">
+          <span class="list-group-progress" style="width: 12.57%;"></span>
+          <span class="pull-right text-muted">440000</span>
+          Centro de extensión Metropolitano
+        </a>
+      
+        <a class="list-group-item toggleable pub" href="#" style=" display: none;">
+          <span class="list-group-progress" style="width: 11.57%;"></span>
+          <span class="pull-right text-muted">405000</span>
+          Mueso Nortino
+        </a>
+      
+        <a class="list-group-item toggleable pub" href="#" style=" display: none;">
+          <span class="list-group-progress" style="width: 11.57%;"></span>
+          <span class="pull-right text-muted">370000</span>
+          Museo de la minería
+        </a>
+      
+        <a class="list-group-item toggleable pub" href="#" style=" display: none;">
+          <span class="list-group-progress" style="width: 10.43%;"></span>
+          <span class="pull-right text-muted">365000</span>
+          Centro cultural VIII
+        </a>
+      
+        <a class="list-group-item toggleable pub" href="#" style=" display: none;">
+          <span class="list-group-progress" style="width: 10%;"></span>
+          <span class="pull-right text-muted">350000</span>
+          Centro cultural V
+        </a>
+      
+    </div>
+    <a href="#" class="btn btn-primary-outline p-x">All countries</a>
+  </div>
+  <div class="col-md-6 m-b-md">
+    <div class="list-group">
+      <h4 class="list-group-header">
+        Mayores gastos
+      </h4>
+      
+        <a class="list-group-item toggleable all otr" href="#">
+          <span class="list-group-progress" style="width: 90.2%;"></span>
+          <span class="pull-right text-muted">33,57 MM($)</span>
+          Casa Matriz RM
+        </a>
+      
+        <a class="list-group-item toggleable all ser" href="#">
+          <span class="list-group-progress" style="width: 32%;"></span>
+          <span class="pull-right text-muted">1,45</span>
+          Oficina de Atención Magallanes
+        </a>
+      
+        <a class="list-group-item toggleable all adm" href="#">
+          <span class="list-group-progress" style="width: 25.5%;"></span>
+          <span class="pull-right text-muted">1,09</span>
+          Administración RM
+        </a>
+      
+        <a class="list-group-item toggleable all adm" href="#">
+          <span class="list-group-progress" style="width: 23.94%;"></span>
+          <span class="pull-right text-muted">0,95</span>
+          Oficina Central
+        </a>
+      
+        <a class="list-group-item toggleable all pub" href="#">
+          <span class="list-group-progress" style="width: 17.71%;"></span>
+          <span class="pull-right text-muted">0,72</span>
+          Oficia pública VII
+        </a>
+      
+        <a class="list-group-item toggleable all pub" href="#">
+          <span class="list-group-progress" style="width: 18.29%;"></span>
+          <span class="pull-right text-muted">0,69</span>
+          Oficina pública RM
+        </a>
+      
+        <a class="list-group-item toggleable all pub" href="#">
+          <span class="list-group-progress" style="width: 16%;"></span>
+          <span class="pull-right text-muted">0,6</span>
+          Oficina pública V
+        </a>
+      
+        <a class="list-group-item toggleable all pub" href="#">
+          <span class="list-group-progress" style="width: 13.91%;"></span>
+          <span class="pull-right text-muted">0,51</span>
+          Museo Metropolitano
+        </a>
+      
+        <a class="list-group-item toggleable all pub" href="#">
+          <span class="list-group-progress" style="width: 13.57%;"></span>
+          <span class="pull-right text-muted">0,5</span>
+          Casa de la Cultura Metropolitana
+        </a>
+      
+        <a class="list-group-item toggleable all pub" href="#">
+          <span class="list-group-progress" style="width: 12.57%;"></span>
+          <span class="pull-right text-muted">0,47</span>
+          Centro de extensión Metropolitano
+        </a>
+      
+        <a class="list-group-item toggleable pub" href="#" style=" display: none;">
+          <span class="list-group-progress" style="width: 11.57%;"></span>
+          <span class="pull-right text-muted">0,42</span>
+          Mueso Nortino
+        </a>
+      
+        <a class="list-group-item toggleable pub" href="#" style=" display: none;">
+          <span class="list-group-progress" style="width: 11.57%;"></span>
+          <span class="pull-right text-muted">0,39</span>
+          Museo de la minería
+        </a>
+      
+        <a class="list-group-item toggleable pub" href="#" style=" display: none;">
+          <span class="list-group-progress" style="width: 10.43%;"></span>
+          <span class="pull-right text-muted">0,37</span>
+          Centro cultural VIII
+        </a>
+      
+        <a class="list-group-item toggleable pub" href="#" style=" display: none;">
+          <span class="list-group-progress" style="width: 10%;"></span>
+          <span class="pull-right text-muted">0,36</span>
+          Centro cultural V
+        </a>      
+    </div>
+    <a href="#" class="btn btn-primary-outline p-x">View all pages</a>
+  </div>
+</div>
+
+<div class="list-group">
+  <h4 class="list-group-header">&nbsp;</h4>
+</div>
+
+
+
+      </div>
+    </div>
+  </div>
+
+  <div id="docsModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog">
+    <div class="modal-content">
+
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Example modal</h4>
+      </div>
+      <div class="modal-body">
+        <p>You're looking at an example modal in the dashboard theme.</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">Cool, got it!</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <script src="assets/js/jquery.min.js"></script>
+
+    <script type="text/javascript">
+      function hide_data(klass)
+      {
+        $("." + klass).hide();
+      }
+
+      function show_data(klass)
+      {
+        hide_data("toggleable");
+        $("." + klass).show();
+      }
+
+      $(document).ready(function(){
+        $('a.toggle').click(function(){
+          show_data($(this).attr('target'));
+        });
+      });
+    </script>
+
+  </body>
+</html>
+
