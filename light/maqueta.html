@@ -461,15 +461,17 @@
     <script src="assets/js/jquery.min.js"></script>
 
     <script type="text/javascript">
+      var transition = 200;
+      var easing="easeInCirc";
       function hide_data(klass)
       {
-        $("." + klass).hide();
+        $("." + klass).hide({duration: transition, ease: easing});
       }
 
       function show_data(klass)
       {
         hide_data("toggleable");
-        $("." + klass).show();
+        $("." + klass).show({duration: transition, ease: easing});
       }
 
       $(document).ready(function(){
